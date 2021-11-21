@@ -7,40 +7,42 @@ var JSSoup = require("jssoup").default;
 exports.get_id_from_link = async (link, c_user, xs) => {
   try {
     const MAIN_DOMAIN = "https://mbasic.facebook.com";
-    const regex = [/profile_id=([a-z0-9\-]+)/, /;id=([a-z0-9\-]+)/];
+    const regex = [/profile_id=([a-z0-9\-]+)/];
 
-    const check_url = new URL(link);
+    const isURL = new URL(link);
     let username;
-    if (check_url.pathname === "/profile.php") {
+    if (isURL.pathname === "/profile.php") {
       return {
-        id: check_url.searchParams.get("id"),
-        username: check_url.searchParams.get("id"),
+        id: isURL.searchParams.get("id"),
+        username: isURL.searchParams.get("id"),
         name: username,
       };
     } else {
-      username = check_url.pathname;
+      username = isURL.pathname;
     }
 
-    let send_m_basic = await axios.get(`${MAIN_DOMAIN}${username}`, {
+    let {data} = await axios.get(`${MAIN_DOMAIN}${username}`, {
       headers: {
         cookie: `c_user=${c_user}; xs=${xs};`,
       },
     });
-    const m_basic_text = send_m_basic.data;
-    const $ = cheerio.load(m_basic_text);
+    const HTML = data;
+    const $ = cheerio.load(HTML);
 
     let isMatched;
     regex.forEach((pat) => {
-      isMatched = m_basic_text.match(pat);
+      isMatched = HTML.match(pat);
     });
     if (isMatched) {
       const user_full_name = $("title").text();
       return { id: isMatched[1], username, name: user_full_name };
     } else {
-      throw new Error("Your account is banned. try in a minute")
+      console.error("NOT MATCHED")
+      return {id: 4, username, name: user_full_name}
     }
   } catch (error) {
-    console.log("Error get_id_from_link",error);
+    console.error(error)
+    console.error("Error get_id_from_link",error);
     return;
   }
 };
