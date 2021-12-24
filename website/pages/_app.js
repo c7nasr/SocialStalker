@@ -2,6 +2,8 @@ import 'tailwindcss/tailwind.css'
 
 import Footer from "./../components/footer"
 import Head from "next/head";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function MyApp({ Component, pageProps }) {
   return <>
@@ -31,7 +33,7 @@ function MyApp({ Component, pageProps }) {
       <meta name="language" content="English" />
       <meta name="author" content="nasrika.com" />
     </Head>
-
+    <ToastContainer />
   <Component {...pageProps} />
     <Footer />
 

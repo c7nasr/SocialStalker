@@ -6,7 +6,7 @@ app.use(cors())
 
 const Facebook = require("./routes/facebook")
 const Instagram = require("./routes/instagram")
-const Twitter = require("./routes/twitter")
+const Admin = require("./routes/admin")
 
 // 1) MIDDLEWARE
 app.use(function (req, res, next) {
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 // 3) ROUTES
 app.use("/facebook", Facebook);
 app.use("/instagram", Instagram);
-app.use("/twitter", Twitter);
+app.use("/admin", Admin);
 
 
 app.all("*", (req, res) => {
