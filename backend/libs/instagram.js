@@ -21,19 +21,26 @@ exports.convertImageToBase = async (link) => {
 
   return imageDataUrl
 };
+const filterURL = (url) => {
+  return url.replace(/\/$/, "");
+}
 extract_instagram_user_id = async (link, session_id, u_id) => {
   try {
     const username = await extract_instagram_username_from_link(link);
+    const url = `https://i.instagram.com/api/v1/users/web_profile_info/?username=${username}`
     const { data } = await axios.get(
-      `https://instagram.com/${username}?__a=1`,
+      filterURL(url),
       {
         headers: {
           cookie: `sessionid=${session_id};ds_user_id=${u_id};`,
+          "x-ig-app-id":"936619743392459",
+          "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
         },
       }
     );
-    return { user_id: data.graphql.user.id };
+    return { user_id: data.data.user.id };
   } catch (err) {
+    console.log(err);
     return { user_id: 0 };
   }
 };
@@ -54,6 +61,7 @@ exports.extract_image_with_info = async (link, session_id, u_id) => {
 
     return { user: data.user, photo: data.user.hd_profile_pic_url_info.url };
   } catch (error) {
+    // console.log(error)
     return { user: {}, photo: null };
   }
 };

@@ -12,6 +12,7 @@ const InstagramSchema = new mongoose.Schema(
     photo: { type: String },
     user: {},
     full_name: { type: String },
+    hash:{type: String}
   },
   { timestamps: true }
 );

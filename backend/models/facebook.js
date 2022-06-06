@@ -12,7 +12,8 @@ const FacebookSchema = new mongoose.Schema(
     photo: { type: String },
     user: {},
     full_name: { type: String },
-    data:{}
+    data:{},
+    hash:{type: String}
   },
   { timestamps: true }
 );

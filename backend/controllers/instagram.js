@@ -30,7 +30,7 @@ exports.InstagramProfilePicture = async (req, res) => {
       return res.sendStatus(400);
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.sendStatus(500);
   }
 };
