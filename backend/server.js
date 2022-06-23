@@ -1,23 +1,39 @@
 const app = require("./app");
 const mongoose = require("mongoose");
+const logger = require("./config/logger");
+const config = require('./config/config');
 
-const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
-const db = process.env.DATABASE.replace("<PASSWORD>", process.env.PASSWORD);
+let server;
+mongoose.connect(config.mongoose.url.replace("<PASSWORD>", config.mongoose.password), config.mongoose.options).then(() => {
+    logger.info('Connected to MongoDB');
+    server = app.listen(config.port, () => {
+        logger.info(`Listening to port ${config.port}`);
+    });
+});
 
-mongoose
-  .connect(db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then((res) => {
-    console.log("Database connection established");
-  })
-  .catch((err) => {
-    console.error("Database connection error: ", err);
-  });
+const exitHandler = () => {
+    if (server) {
+        server.close(() => {
+            logger.info('Server closed');
+            logger.info("Restarting... ")
+            server.restart()
+        });
+    } else {
+        process.exit(1);
+    }
+};
 
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log("App running on port " + port + "...");
+const unexpectedErrorHandler = (error) => {
+    logger.error(error);
+    exitHandler();
+};
+
+process.on('uncaughtException', unexpectedErrorHandler);
+process.on('unhandledRejection', unexpectedErrorHandler);
+
+process.on('SIGTERM', () => {
+    logger.info('SIGTERM received');
+    if (server) {
+        server.close();
+    }
 });

@@ -4,21 +4,34 @@
     "axios": "^0.24.0",
     "bull": "^4.1.0",
     "cheerio": "^1.0.0-rc.10",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-useragent": "^1.0.15",
     "firebase-admin": "^10.0.0",
     "form-data": "^4.0.0",
+    "helmet": "^5.1.0",
+    "http-status": "^1.5.2",
     "ioredis": "^4.28.0",
     "ipinfo": "^1.5.1",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "jssoup": "^0.0.15",
     "mongoose": "^6.0.12",
+    "morgan": "^1.10.0",
+    "node-image-hash": "^1.1.0",
+    "node-ipinfo": "^3.1.0",
     "probe-image-size": "^7.2.2",
     "request": "^2.88.2",
+    "request-ip": "^2.2.0",
     "request-promise-native": "^1.0.9",
     "socket.io": "^4.3.2",
-    "uuid": "^8.3.2"
+    "underscore": "^1.13.4",
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2",
+    "xss-clean": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
@@ -28,7 +41,7 @@
   "main": "server",
   "license": "MIT",
   "scripts": {
-    "test": "nodemon server",
+    "dev": "nodemon server",
     "start": "node server"
   }
 }
