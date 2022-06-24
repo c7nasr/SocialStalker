@@ -3,8 +3,8 @@ import React from 'react'
 
 function UnsupportedBrowser({device}) {
     return (
-        <div className="w-auto p-5 m-auto text-center text-white bg-red-700 border-2 border-red-700 shadow-2xl max-w-max rounded-xl my-7">
-          <div className="relative m-auto text-center text-white border-0 rounded ">
+        <div className="w-auto p-5  text-center text-white bg-red-700 max-w-max rounded-xl my-7 mx-4">
+            <div className="relative m-auto text-center text-white border-0 rounded ">
             <span className="justify-center inline-block mr-2 text-xl align-middle">
               <MdError />
             </span>
