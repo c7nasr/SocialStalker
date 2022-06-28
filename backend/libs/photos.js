@@ -89,8 +89,8 @@ const convertImageUrlToBase64 = async (link) => {
 
 
 };
-const findByHash = (hash, service) => {
-    return Photos.findOne({hash, service})
+const findByHash = (hash, username) => {
+    return Photos.findOne({hash, username})
 }
 module.exports = {
     GenderDetection, ImageToCloud,

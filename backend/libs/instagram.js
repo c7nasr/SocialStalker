@@ -56,15 +56,12 @@ const GetUserInfo = async (cookies) => {
 };
 
 const GetInstagramTargetInfoFromPhoto = async (url) => {
-    const Hashed = await PhotoProcessor.HashImage(url)
-    const isExisted = await PhotoProcessor.findByHash(Hashed, "Unlock Instagram Profile Picture")
-    if (isExisted) return {isExisted: true, hash: Hashed, user: isExisted.user}
     const userPictureData = await PhotoProcessor.GenderDetection(url)
     const userPictureOnCloud = await PhotoProcessor.ImageToCloud(url)
 
 
     return {
-        userPictureData, userPictureOnCloud, hash: Hashed, isExisted: false
+        userPictureData, userPictureOnCloud
     }
 }
 

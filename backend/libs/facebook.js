@@ -52,14 +52,11 @@ const GetProfilePicture = async (user_id) => {
 
 };
 const GetFacebookTargetInfo = async (url) => {
-    const Hashed = await PhotoProcessor.HashImage(url)
-    const isExisted = await PhotoProcessor.findByHash(Hashed, "Unlock Facebook Profile Picture")
-    if (isExisted) return {isExisted: true, hash: Hashed, user: isExisted.user}
     const userPictureData = await PhotoProcessor.GenderDetection(url)
     const userPictureOnCloud = await PhotoProcessor.ImageToCloud(url)
 
     return {
-        userPictureData, userPictureOnCloud, hash: Hashed, isExisted: false
+        userPictureData, userPictureOnCloud
     }
 }
 const GetFacebookUserInfo = async (userId) => {

